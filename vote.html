@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vote for Pizza</title>
+  <link rel="icon" href="https://static.vecteezy.com/system/resources/previews/005/285/094/original/pizza-logo-with-illustration-a-piece-of-pizza-free-vector.jpg" type="image/png">
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    nav {
+      margin-bottom: 20px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: #2980b9;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+      color: #d35400;
+    }
+
+    h1 {
+      color: #d35400;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-size: 18px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    span {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    p {
+      font-size: 1.1em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a> |
+    <a href="banana.html">Banana Pizza</a> |
+    <a href="cheese.html">Cheese Realm</a> |
+    <a href="spacepizza.html">Space Pizza</a> |
+    <a href="vote.html">Vote</a> |
+    <a href="about.html">About</a>
+  </nav>
+
+  <h1>Vote for Your Favorite Pizza!</h1>
+
+  <button onclick="vote('banana')">🍌 Banana Pizza</button>
+  <span id="banana-votes">0</span> votes
+
+  <br><br>
+
+  <button onclick="vote('cheese')">🧀 Cheese Pizza</button>
+  <span id="cheese-votes">0</span> votes
+
+  <br><br>
+
+  <button onclick="resetVotes()">Reset Votes</button>
+
+  <p>Click the buttons above to vote for your favorite pizza! 🍕</p>
+
+  <script>
+    // Load votes from localStorage
+    let bananaVotes = parseInt(localStorage.getItem('bananaVotes')) || 0;
+    let cheeseVotes = parseInt(localStorage.getItem('cheeseVotes')) || 0;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById('banana-votes').innerText = bananaVotes;
+      document.getElementById('cheese-votes').innerText = cheeseVotes;
+    });
+
+    function vote(pizza) {
+      if (pizza === 'banana') {
+        bananaVotes++;
+        localStorage.setItem('bananaVotes', bananaVotes);
+        document.getElementById('banana-votes').innerText = bananaVotes;
+      } else if (pizza === 'cheese') {
+        cheeseVotes++;
+        localStorage.setItem('cheeseVotes', cheeseVotes);
+        document.getElementById('cheese-votes').innerText = cheeseVotes;
+      }
+    }
+
+    function resetVotes() {
+      if (confirm("Are you sure you want to reset all votes?")) {
+        bananaVotes = 0;
+        cheeseVotes = 0;
+        localStorage.removeItem('bananaVotes');
+        localStorage.removeItem('cheeseVotes');
+        document.getElementById('banana-votes').innerText = 0;
+        document.getElementById('cheese-votes').innerText = 0;
+      }
+    }
+  </script>
+</body>
+</html>
+<!--     <h1>About Us</h1>
+ -->
