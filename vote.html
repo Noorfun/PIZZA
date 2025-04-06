@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote for Your Favorite Pizza!</title>
+    <link rel="icon" href="https://static.vecteezy.com/system/resources/previews/005/285/094/original/pizza-logo-with-illustration-a-piece-of-pizza-free-vector.jpg" type="image/png">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+</head>
+<body>
+    <nav>
+        <a href="index.html">Home</a> |
+        <a href="banana.html">Banana Pizza</a> |
+        <a href="cheese.html">Cheese Realm</a> |
+        <a href="spacepizza.html">Space Pizza</a> |
+        <a href="vote.html">Vote</a> |
+        <a href="about.html">About</a>
+    </nav>
+    
+    <h1>Vote for Your Favorite Pizza!</h1>
+    
+    <button onclick="vote('banana')">🍌 Banana Pizza</button>
+    <span id="banana-votes">0</span> votes
+    
+    <br><br>
+    
+    <button onclick="vote('cheese')">🧀 Cheese Pizza</button>
+    <span id="cheese-votes">0</span> votes
+
+    <br><br>
+    <button onclick="resetVotes()">Reset Votes</button>
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOa3r7-7RlcEW15fYhwNV4Z0MrCiuDMqU",
+            authDomain: "pizzavotes.firebaseapp.com",
+            projectId: "pizzavotes",
+            storageBucket: "pizzavotes.firebasestorage.app",
+            messagingSenderId: "283208720061",
+            appId: "1:283208720061:web:c5916b7b08cea7a519e1d4",
+            measurementId: "G-9BL8Q931VE"
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Fetch vote counts from Firebase and update the UI
+        function loadVotes() {
+            const votesRef = database.ref("votes");
+            votesRef.once("value", function(snapshot) {
+                const votes = snapshot.val() || { banana: 0, cheese: 0 };
+                document.getElementById("banana-votes").innerText = votes.banana;
+                document.getElementById("cheese-votes").innerText = votes.cheese;
+            });
+        }
+
+        // Update Firebase with the latest vote count
+        function vote(pizza) {
+            const votesRef = database.ref("votes");
+            votesRef.once("value", function(snapshot) {
+                const votes = snapshot.val() || { banana: 0, cheese: 0 };
+                
+                if (pizza === 'banana') {
+                    votes.banana++;
+                } else if (pizza === 'cheese') {
+                    votes.cheese++;
+                }
+                
+                // Update Firebase with new vote count
+                votesRef.set(votes);
+
+                // Update UI with new vote counts
+                document.getElementById('banana-votes').innerText = votes.banana;
+                document.getElementById('cheese-votes').innerText = votes.cheese;
+            });
+        }
+
+        // Reset votes on Firebase
+        function resetVotes() {
+            if (confirm("Are you sure you want to reset all votes?")) {
+                const votesRef = database.ref("votes");
+                votesRef.set({ banana: 0, cheese: 0 });
+
+                // Reset vote counts in UI
+                document.getElementById('banana-votes').innerText = 0;
+                document.getElementById('cheese-votes').innerText = 0;
+            }
+        }
+
+        // Load votes when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            loadVotes();
+        });
+    </script>
+
+    <style>  
+        /* Basic styles for the voting page */
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        button {
+            font-size: 18px;
+            margin: 10px;
+            padding: 10px 20px;
+        }
+
+        nav {
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #2980b9;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+            color: #d35400;
+        }
+
+        h1 {
+            color: #d35400;
+            margin-bottom: 20px;
+        }
+
+        span {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #555;
+        }
+    </style>
+
+    <p>Click the buttons above to vote for your favorite pizza! 🍕</p>
+</body>
+</html>
